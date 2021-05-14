@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.scss";
 
-function App() {
+import Game from "./components/Game";
+
+export default function App() {
+  const [moves, setMoves] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+  const [numCards, setNumCards] = useState(12);
+  const [gameOver, setGameOver] = useState(true);
+
+  const handleStart = (n) => {
+    setNumCards(n)
+    setGameOver(false)
+  }
+  const handleRestart = () => {
+    setGameOver(true)
+    setMoves(0)
+  };
+
+  const options = (
+    <div>
+      <button onClick={() => handleStart(12)}>Easy</button>
+      <button onClick={() => handleStart(16)}>Medium</button>
+      <button onClick={() => handleStart(20)}>Hard</button>
+    </div>
+  );
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div>
+          <h1>Card Memory Game</h1>
+          <p>Flip cards to find matching pairs.</p>
+        </div>
+        <div>
+          <div>Moves: {moves}</div>
+          {/* <p>High Score: {highScore}</p> */}
+          {gameOver ? null : <button onClick={handleRestart}>New game</button>}
+        </div>
       </header>
+
+      {gameOver ? (
+        options
+      ) : (
+        <Game
+          numCards={numCards}
+          setMoves={setMoves}
+          setHighScore={setHighScore}
+        />
+      )}
     </div>
   );
 }
-
-export default App;
