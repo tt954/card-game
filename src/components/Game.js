@@ -4,20 +4,7 @@ import { shuffleCards } from "../utils/helpers";
 import Card from "./Card";
 
 const playingCards = (() => {
-  const values = [
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "J",
-    "Q",
-    "K",
-    "A",
-  ];
+  const values = ["2", "3", "4", "5", "6", "7", "8", "9", "J", "Q", "K", "A"];
   const suits = ["C", "D", "H", "S"];
   const cards = [];
   values.forEach((v) => {
@@ -47,7 +34,23 @@ const colors = [
 ];
 
 export default function Game({ numCards, setMoves }) {
-  const [deck, setDeck] = useState([]);
+  const [deck, setDeck] = useState([])
+  const [openCards, setOpenCards] = useState([])
+
+  const handleCardClicked = (pairId) => {
+    if (openCards.length === 1) {
+        setOpenCards(prev => [...prev, pairId])
+    } else {
+        setOpenCards(pairId)
+    }
+  }
+
+  const evaluate = () => {
+    const [first, second] = openCards
+    if (first === second) {
+        console.log('match')
+    }
+  }
 
   useEffect(() => {
     const newDeck = [];
@@ -56,13 +59,11 @@ export default function Game({ numCards, setMoves }) {
         id: 2 * i,
         pairId: i,
         back: colors[i],
-        flipped: false,
       };
       const second = {
         id: 2 * i + 1,
         pairId: i,
         back: colors[i],
-        flipped: false,
       };
       newDeck.push(first, second);
     }
@@ -70,10 +71,16 @@ export default function Game({ numCards, setMoves }) {
     console.log(newDeck);
   }, [numCards]);
 
+  useEffect(() => {
+    if (openCards.length === 2) {
+      evaluate()
+    }
+  }, [openCards])
+
   return (
     <div className="grid">
-      {deck.map((card, idx) => (
-        <Card key={idx} back={card.back} />
+      {deck.map((card) => (
+        <Card key={card.id} card={card} onClicked={handleCardClicked}/>
       ))}
     </div>
   );

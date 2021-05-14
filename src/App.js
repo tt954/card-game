@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.scss";
 
 import Game from "./components/Game";
@@ -9,15 +9,6 @@ export default function App() {
   const [numCards, setNumCards] = useState(12);
   const [gameOver, setGameOver] = useState(true);
 
-  const handleStart = (n) => {
-    setNumCards(n)
-    setGameOver(false)
-  }
-  const handleRestart = () => {
-    setGameOver(true)
-    setMoves(0)
-  };
-
   const options = (
     <div>
       <button onClick={() => handleStart(12)}>Easy</button>
@@ -25,6 +16,16 @@ export default function App() {
       <button onClick={() => handleStart(20)}>Hard</button>
     </div>
   );
+
+  const handleStart = (n) => {
+    setNumCards(n)
+    setGameOver(false)
+  }
+
+  const handleRestart = () => {
+    setGameOver(true)
+    setMoves(0)
+  };
 
   return (
     <div className="App">
