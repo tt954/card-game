@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { shuffleCards } from "../utils/helpers";
 
 import Card from "./Card";
@@ -36,12 +36,14 @@ const colors = [
 export default function Game({ numCards, setMoves }) {
   const [deck, setDeck] = useState([])
   const [openCards, setOpenCards] = useState([])
+  const timeout = useRef(null)
 
   const handleCardClicked = (pairId) => {
     if (openCards.length === 1) {
-        setOpenCards(prev => [...prev, pairId])
+        setOpenCards((prev) => [...prev, pairId]);
+        setMoves(moves => moves + 1)
     } else {
-        setOpenCards(pairId)
+        setOpenCards([pairId]);
     }
   }
 
@@ -71,17 +73,22 @@ export default function Game({ numCards, setMoves }) {
     console.log(newDeck);
   }, [numCards]);
 
-  useEffect(() => {
-    if (openCards.length === 2) {
-      evaluate()
-    }
-  }, [openCards])
+//   useEffect(() => {
+//     let timeout = null;
+//     if (openCards.length === 2) {
+//       timeout = setTimeout(evaluate, 300);
+//     }
+//     return () => {
+//       clearTimeout(timeout);
+//     };
+//   }, [openCards]);
 
   return (
     <div className="grid">
       {deck.map((card) => (
         <Card key={card.id} card={card} onClicked={handleCardClicked}/>
       ))}
+      {console.log(openCards)}
     </div>
   );
 }

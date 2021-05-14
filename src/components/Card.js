@@ -11,7 +11,7 @@ export default function Card({ card, onClicked }) {
   };
 
   return (
-    <div className={`card ${flipped ? 'is-flipped' : ''}`} onClick={handleClicked}>
+    <div className={`card ${flipped ? 'flipped' : ''}`} onClick={handleClicked}>
       <div className="card-face front">
         <img src={front} alt="" />
       </div>

@@ -30,7 +30,7 @@
       transform: rotateY(180deg);
     }
   }
-  &.is-flipped {
+  &.flipped {
     transform: rotateY(180deg);
   }
 }
