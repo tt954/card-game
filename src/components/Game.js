@@ -73,7 +73,7 @@ export default function Game({ numCards, setMoves }) {
   return (
     <div className="grid">
       {deck.map((card, idx) => (
-        <Card key={idx} back={card.colors} />
+        <Card key={idx} back={card.back} />
       ))}
     </div>
   );

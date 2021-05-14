@@ -8,8 +8,7 @@ export default function Card({back}) {
         <div className="card-face front">
           <img src={front} alt="" />
         </div>
-        <div className="card-face back" style={{ backgroundColor: back}}>
-            hello
+        <div className="card-face back" style={{ backgroundColor: back }}>
         </div>
       </div>
     );
