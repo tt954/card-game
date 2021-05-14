@@ -11,14 +11,14 @@ export default function Card({ card, onClicked }) {
   };
 
   return (
-    <div className={`card ${flipped ? 'is-Flipped' : ''}`} onClick={handleClicked}>
+    <div className={`card ${flipped ? 'is-flipped' : ''}`} onClick={handleClicked}>
       <div className="card-face front">
         <img src={front} alt="" />
       </div>
       <div
         className="card-face back"
         style={{ backgroundColor: card.back }}
-      ></div>
+      >hello</div>
     </div>
   );
 }
