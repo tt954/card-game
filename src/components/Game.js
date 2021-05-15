@@ -9,9 +9,11 @@ const playingCards = (() => {
   const cards = [];
   values.forEach((v) => {
     suits.forEach((s) => {
+      const card = v + s
+      const url = `../media/PNG/${card}.png`
       cards.push({
-        type: v + s,
-        image: require(`../media/PNG/${v + s}.png`),
+        type: card,
+        image: url,
       });
     });
   });
@@ -34,38 +36,33 @@ const colors = [
 ];
 
 export default function Game({ numCards, setMoves }) {
-  const [deck, setDeck] = useState([])
-  const [openCards, setOpenCards] = useState([])
-  const timeout = useRef(null)
+  const [deck, setDeck] = useState([]);
+  const [openCards, setOpenCards] = useState([]);
+  const [matched, setMatched] = useState([]);
+  const timeout = useRef(null);
 
-  const handleCardClicked = (pairId) => {
-    if (openCards.length === 1) {
-        setOpenCards((prev) => [...prev, pairId]);
-        setMoves(moves => moves + 1)
-    } else {
-        setOpenCards([pairId]);
-    }
-  }
+  const handleCardClicked = (idx) => {
+    setOpenCards(opened => [...opened, idx])
+  };
 
   const evaluate = () => {
-    const [first, second] = openCards
-    if (first === second) {
-        console.log('match')
-    }
-  }
+    const [first, second] = openCards;
+    const match = deck[first].pairId === deck[second].pairId;
+    if (match) {}
+  };
 
   useEffect(() => {
     const newDeck = [];
     for (let i = 0; i < numCards / 2; i++) {
       const first = {
-        id: 2 * i,
         pairId: i,
         back: colors[i],
+        flipped: false,
       };
       const second = {
-        id: 2 * i + 1,
         pairId: i,
         back: colors[i],
+        flipped: false,
       };
       newDeck.push(first, second);
     }
@@ -73,22 +70,36 @@ export default function Game({ numCards, setMoves }) {
     console.log(newDeck);
   }, [numCards]);
 
-//   useEffect(() => {
-//     let timeout = null;
-//     if (openCards.length === 2) {
-//       timeout = setTimeout(evaluate, 300);
-//     }
-//     return () => {
-//       clearTimeout(timeout);
-//     };
-//   }, [openCards]);
+  //   useEffect(() => {
+  //     let timeout = null;
+  //     if (openCards.length === 2) {
+  //       timeout = setTimeout(evaluate, 300);
+  //     }
+  //     return () => {
+  //       clearTimeout(timeout);
+  //     };
+  //   }, [openCards]);
+  useEffect(() => {
+    const first = deck[openCards[0]]
+    const second = deck[openCards[1]]
+    
+    if (second && first.pairId === second.pairId) {
+        setMatched(prev => [...prev, first.pairId])
+    }
+    if (openCards.length === 2) {
+        setTimeout(() => setOpenCards([]), 1000)
+    }
+    
+  }, [openCards]);
 
   return (
     <div className="grid">
-      {deck.map((card) => (
-        <Card key={card.id} card={card} onClicked={handleCardClicked}/>
-      ))}
-      {console.log(openCards)}
+      {deck.map((card, idx) => {
+        let flipped = false;
+        if (openCards.includes(idx)) flipped = true;
+        if (matched.includes(card.pairId)) flipped = true;
+        return <Card key={idx} idx={idx} card={card} flipped={flipped} onClicked={handleCardClicked} />
+      })}
     </div>
   );
 }
