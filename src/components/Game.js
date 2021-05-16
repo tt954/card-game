@@ -1,41 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { shuffleCards } from "../utils/helpers";
-
 import { Grid } from "@chakra-ui/react";
 
 import Card from "./Card";
-
-const playingCards = (() => {
-  const values = ["2", "3", "4", "5", "6", "7", "8", "9", "J", "Q", "K", "A"];
-  const suits = ["C", "D", "H", "S"];
-  const cards = [];
-  values.forEach((v) => {
-    suits.forEach((s) => {
-      const card = v + s
-      const url = `../media/PNG/${card}.png`
-      cards.push({
-        type: card,
-        image: url,
-      });
-    });
-  });
-  return cards;
-})();
-
-const colors = [
-  "#ecdb54",
-  "#e34132",
-  "#6ca0dc",
-  "#944743",
-  "#dbb2d1",
-  "#ec9787",
-  "#00a68c",
-  "#645394",
-  "#6c4f3d",
-  "#ebe1df",
-  "#bc6ca7",
-  "#bfd833",
-];
+import { colors, playingCards } from "../db/cardOptions";
+import { shuffleCards } from "../utils/helpers";
 
 export default function Game({ numCards, setMoves }) {
   const [deck, setDeck] = useState([]);
@@ -44,7 +12,13 @@ export default function Game({ numCards, setMoves }) {
   const timeout = useRef(null);
 
   const handleCardClicked = (idx) => {
-    setOpenCards(opened => [...opened, idx])
+    if (openCards.length === 1) {
+      setOpenCards((opened) => [...opened, idx]);
+      setMoves((moves) => moves + 1);
+    } else {
+      clearTimeout(timeout);
+      setOpenCards([idx]);
+    }
   };
 
   const evaluate = () => {
@@ -59,31 +33,33 @@ export default function Game({ numCards, setMoves }) {
 
   useEffect(() => {
     const newDeck = [];
+    const deck = shuffleCards(colors);
     for (let i = 0; i < numCards / 2; i++) {
       const first = {
         pairId: i,
-        back: colors[i],
+        back: deck[i],
         flipped: false,
       };
       const second = {
         pairId: i,
-        back: colors[i],
+        back: deck[i],
         flipped: false,
       };
       newDeck.push(first, second);
     }
     setDeck(shuffleCards(newDeck));
+    console.log(deck);
     console.log(newDeck);
   }, [numCards]);
 
   useEffect(() => {
     if (openCards.length === 2) {
-        setTimeout(evaluate, 500)
+      setTimeout(evaluate, 500);
     }
   }, [openCards]);
 
   return (
-    <Grid templateColumns="repeat(4, 1fr)" gap={4} w="100%" h="100%">
+    <Grid templateColumns="repeat(4, 1fr)" gap={4} my={4}>
       {deck.map((card, idx) => {
         let flipped = false;
         if (openCards.includes(idx)) flipped = true;

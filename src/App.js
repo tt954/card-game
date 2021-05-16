@@ -31,17 +31,17 @@ export default function App() {
   );
 
   const handleStart = (n) => {
-    setNumCards(n)
-    setGameOver(false)
-  }
+    setNumCards(n);
+    setGameOver(false);
+  };
 
   const handleRestart = () => {
-    setGameOver(true)
-    setMoves(0)
+    setGameOver(true);
+    setMoves(0);
   };
 
   return (
-    <Container maxH="100vh" centerContent>
+    <Container centerContent>
       <header className="App-header">
         <div>
           <Heading as="h1" size="3xl">
@@ -50,13 +50,6 @@ export default function App() {
           <Text fontSize="lg" color="gray.500">
             Flip cards to find matching pairs.
           </Text>
-        </div>
-        <div>
-          {gameOver ? null : (
-            <Button variant="outline" onClick={handleRestart}>
-              New game
-            </Button>
-          )}
         </div>
       </header>
 
@@ -70,10 +63,15 @@ export default function App() {
         />
       )}
 
-      <Stack direction="row">
-        <Text>Moves: {moves}</Text>
-        <Text>High Score: {highScore}</Text>
-      </Stack>
+      {gameOver ? null : (
+        <Stack direction="row" w="100%" justifyContent="space-between">
+          <Text fontSize="2xl">Moves: {moves}</Text>
+          <Button variant="outline" onClick={handleRestart}>
+            New game
+          </Button>
+          <Text fontSize="2xl">High Score: {highScore}</Text>
+        </Stack>
+      )}
     </Container>
   );
 }
