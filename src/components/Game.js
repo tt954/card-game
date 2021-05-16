@@ -83,7 +83,7 @@ export default function Game({ numCards, setMoves }) {
   }, [openCards]);
 
   return (
-    <Grid h="50%" templateColumns="repeat(4, 1fr)" gap={4}>
+    <Grid templateColumns="repeat(4, 1fr)" gap={4} w="100%" h="100%">
       {deck.map((card, idx) => {
         let flipped = false;
         if (openCards.includes(idx)) flipped = true;

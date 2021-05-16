@@ -1,34 +1,53 @@
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  justify-items: center;
-  align-items: stretch;
-  gap: 1rem;
-  padding: 0 10rem;
-}
+:root { --time: 0.505s; }
 
 .card {
-  transition: 0.3s;
-  transform-style: preserve-3d;
-  position: relative;
+  display: flex;
+  perspective: 40rem;
+  transition: z-index, transform calc(var(--time) / 4);
+  transition-delay: var(--time), 0s;
   cursor: pointer;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-  .card-face {
-    backface-visibility: hidden;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    &.back {
-      transform: rotateY(180deg);
-    }
-  }
+  z-index: 0;
+  
   &.flipped {
+    transition-delay: 0s;
+    z-index: 1;
+  }
+
+  &.flipped {
+    transform: scale(0.975);
+  }
+}
+
+.card-body {
+  display: flex;
+  flex: 1;
+  border-radius: 0.25rem;
+  transform-style: preserve-3d;
+  transition: var(--time) transform;
+
+  .flipped & {
     transform: rotateY(180deg);
   }
 }
 
+.card-front, .card-back {
+  @extend .shadow;
+  // display: flex;
+  // align-items: center;
+  // box-sizing: border-box;
+  border-radius: 0.25rem;
+  backface-visibility: hidden;
+  min-width: 100%;
+}
 
+.card-back {
+  transform: rotateY(180deg) translate(100%, 0);
+}
+
+.shadow {
+  box-shadow: 0 -1px 1px rgba(0,0,0,0.04), 
+              0 2px 2px rgba(0,0,0,0.04), 
+              0 4px 4px rgba(0,0,0,0.04), 
+              0 8px 8px rgba(0,0,0,0.04),
+              0 16px 16px rgba(0,0,0,0.04); 
+}

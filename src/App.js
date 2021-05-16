@@ -12,7 +12,7 @@ export default function App() {
   const [gameOver, setGameOver] = useState(true);
 
   const options = (
-    <Stack direction="column">
+    <Stack direction="column" h="100%">
       <Heading as="h4" size="md">
         Choose a difficulty to begin.
       </Heading>
@@ -41,7 +41,7 @@ export default function App() {
   };
 
   return (
-    <Container h="100vh" centerContent>
+    <Container maxH="100vh" centerContent>
       <header className="App-header">
         <div>
           <Heading as="h1" size="3xl">
