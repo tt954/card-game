@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { shuffleCards } from "../utils/helpers";
 
+import { Grid } from "@chakra-ui/react";
+
 import Card from "./Card";
 
 const playingCards = (() => {
@@ -46,9 +48,13 @@ export default function Game({ numCards, setMoves }) {
   };
 
   const evaluate = () => {
-    const [first, second] = openCards;
-    const match = deck[first].pairId === deck[second].pairId;
-    if (match) {}
+    const first = deck[openCards[0]];
+    const second = deck[openCards[1]];
+
+    if (second && first.pairId === second.pairId) {
+      setMatched((prev) => [...prev, first.pairId]);
+    }
+    timeout.current = setTimeout(() => setOpenCards([]), 1000);
   };
 
   useEffect(() => {
@@ -70,36 +76,28 @@ export default function Game({ numCards, setMoves }) {
     console.log(newDeck);
   }, [numCards]);
 
-  //   useEffect(() => {
-  //     let timeout = null;
-  //     if (openCards.length === 2) {
-  //       timeout = setTimeout(evaluate, 300);
-  //     }
-  //     return () => {
-  //       clearTimeout(timeout);
-  //     };
-  //   }, [openCards]);
   useEffect(() => {
-    const first = deck[openCards[0]]
-    const second = deck[openCards[1]]
-    
-    if (second && first.pairId === second.pairId) {
-        setMatched(prev => [...prev, first.pairId])
-    }
     if (openCards.length === 2) {
-        setTimeout(() => setOpenCards([]), 1000)
+        setTimeout(evaluate, 500)
     }
-    
   }, [openCards]);
 
   return (
-    <div className="grid">
+    <Grid h="50%" templateColumns="repeat(4, 1fr)" gap={4}>
       {deck.map((card, idx) => {
         let flipped = false;
         if (openCards.includes(idx)) flipped = true;
         if (matched.includes(card.pairId)) flipped = true;
-        return <Card key={idx} idx={idx} card={card} flipped={flipped} onClicked={handleCardClicked} />
+        return (
+          <Card
+            key={idx}
+            idx={idx}
+            card={card}
+            flipped={flipped}
+            onClicked={handleCardClicked}
+          />
+        );
       })}
-    </div>
+    </Grid>
   );
 }

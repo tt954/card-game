@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./App.scss";
 
+import { Container, Heading, Text, Stack, Button } from "@chakra-ui/react";
+
 import Game from "./components/Game";
 
 export default function App() {
@@ -10,11 +12,22 @@ export default function App() {
   const [gameOver, setGameOver] = useState(true);
 
   const options = (
-    <div>
-      <button onClick={() => handleStart(12)}>Easy</button>
-      <button onClick={() => handleStart(16)}>Medium</button>
-      <button onClick={() => handleStart(20)}>Hard</button>
-    </div>
+    <Stack direction="column">
+      <Heading as="h4" size="md">
+        Choose a difficulty to begin.
+      </Heading>
+      <Stack direction="row" spacing={4}>
+        <Button variant="outline" onClick={() => handleStart(12)}>
+          Easy
+        </Button>
+        <Button variant="outline" onClick={() => handleStart(16)}>
+          Medium
+        </Button>
+        <Button variant="outline" onClick={() => handleStart(20)}>
+          Hard
+        </Button>
+      </Stack>
+    </Stack>
   );
 
   const handleStart = (n) => {
@@ -28,16 +41,22 @@ export default function App() {
   };
 
   return (
-    <div className="App">
+    <Container h="100vh" centerContent>
       <header className="App-header">
         <div>
-          <h1>Card Memory Game</h1>
-          <p>Flip cards to find matching pairs.</p>
+          <Heading as="h1" size="3xl">
+            Card Memory Game
+          </Heading>
+          <Text fontSize="lg" color="gray.500">
+            Flip cards to find matching pairs.
+          </Text>
         </div>
         <div>
-          <div>Moves: {moves}</div>
-          {/* <p>High Score: {highScore}</p> */}
-          {gameOver ? null : <button onClick={handleRestart}>New game</button>}
+          {gameOver ? null : (
+            <Button variant="outline" onClick={handleRestart}>
+              New game
+            </Button>
+          )}
         </div>
       </header>
 
@@ -50,6 +69,11 @@ export default function App() {
           setHighScore={setHighScore}
         />
       )}
-    </div>
+
+      <Stack direction="row">
+        <Text>Moves: {moves}</Text>
+        <Text>High Score: {highScore}</Text>
+      </Stack>
+    </Container>
   );
 }
